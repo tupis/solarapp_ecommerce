@@ -8,90 +8,8 @@ import { useCart } from "@/context/CartContext";
 import Slider from "react-slick";
 import ProductCard from "@/components/ProdutCard";
 import { formatCurrencyNumber } from "@/utils/formatCurrency";
-
-const products = [
-  {
-    id: 1,
-    name: "Inversor Solar XYZ 5000W",
-    price: 2000,
-    discount: 15,
-    description:
-      "O Inversor Solar XYZ de 5000W é perfeito para sistemas de energia solar de médio a grande porte. Este inversor inteligente converte a energia solar captada em eletricidade de alta qualidade, permitindo uma conexão fácil com a rede elétrica ou uso em modo isolado (off-grid).",
-    images: [
-      "https://placehold.co/600x400",
-      "https://placehold.co/600x401",
-      "https://placehold.co/600x402",
-      "https://placehold.co/600x403",
-    ],
-    technicalDetails: {
-      efficiency: "98.5%",
-      warranty: "10 anos",
-      weight: "25kg",
-      dimensions: "45 x 35 x 15 cm",
-      voltageRange: "100V - 500V",
-      compatiblePanels: "Monocristalino, Policristalino, Filme Fino",
-      operatingTemperature: "-20°C a 60°C",
-      ipRating: "IP65",
-      maxInputCurrent: "15A",
-      maxOutputCurrent: "25A",
-      gridCompatibility: "Monofásico, Bifásico, Trifásico",
-      connectivity: "Wi-Fi, RS485, Bluetooth",
-      certifications: "CE, TUV, IEC 62109",
-      noiseLevel: "Menor que 25dB",
-    },
-    ecoImpact: {
-      co2Savings: "Aproximadamente 1,5 tonelada/ano",
-      energySavings: "Até 70% de economia na conta de luz",
-      recyclableMaterials: "80% dos componentes são recicláveis",
-    },
-    installation: {
-      included: "Manual de instalação, kit de montagem e suporte técnico",
-      recommendedProfessionals: "Instaladores certificados em energia solar",
-    },
-  },
-];
-
-const relatedProducts = [
-  {
-    id: 2,
-    name: "Painel Solar 330W Monocristalino",
-    price: 850,
-    discount: 10,
-    image: "https://placehold.co/400x300",
-  },
-  {
-    id: 3,
-    name: "Controlador de Carga Solar MPPT",
-    price: 650,
-    discount: 5,
-    image: "https://placehold.co/400x301",
-  },
-  {
-    id: 4,
-    name: "Bateria Solar 12V 150Ah",
-    price: 1200,
-    discount: 20,
-    image: "https://placehold.co/400x302",
-  },
-];
-
-const reviews = [
-  {
-    name: "João P.",
-    content:
-      "Excelente produto, fácil de instalar e funciona perfeitamente com meu sistema de painéis solares. A eficiência é ótima!",
-  },
-  {
-    name: "Maria S.",
-    content:
-      "Estou usando este inversor há 6 meses e até agora estou muito satisfeita. Recomendo!",
-  },
-  {
-    name: "Carlos M.",
-    content:
-      "Ótima relação custo-benefício, o suporte técnico é muito prestativo!",
-  },
-];
+import { productsInfoComplete, relatedProducts } from "@/app/mocks/product";
+import { reviews } from "@/app/mocks/reviews";
 
 const getDiscountedPrice = (price: number, discount: number) => {
   return price - (price * discount) / 100;
@@ -100,7 +18,7 @@ const getDiscountedPrice = (price: number, discount: number) => {
 const ProductDetails = () => {
   const { addToCart } = useCart();
   const router = useRouter();
-  const product = products.find((p) => p.id === 1);
+  const product = productsInfoComplete.find((p) => p.id === 1);
 
   const [selectedImage, setSelectedImage] = useState(product?.images[0]);
 

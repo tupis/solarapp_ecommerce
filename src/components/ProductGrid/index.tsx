@@ -5,26 +5,15 @@ import { useSearchParams } from "next/navigation";
 import ProductCard from "@/components/ProdutCard";
 import { formatCurrencyNumber } from "@/utils/formatCurrency";
 import getDiscountedPrice from "@/utils/getDiscountPrice";
-
-const products = Array.from({ length: 50 }, (_, index) => ({
-  id: index + 2,
-  name: `Produto ${index + 1}`,
-  price: Math.floor(Math.random() * 1000) + 500,
-  discount: Math.floor(Math.random() * 20),
-  image: `https://placehold.co/400x30${index}`,
-  type: ["Inversores", "Módulos", "Estruturas", "Elétricos"][index % 4],
-  brand: ["Marca A", "Marca B", "Marca C"][index % 3],
-  sold: Math.floor(Math.random() * 1000),
-  power: Math.floor(Math.random() * 500) + 100,
-}));
+import { productsHomePage } from "@/app/mocks/product";
 
 const PRODUCTS_PER_PAGE = 8;
 
 export default function ProductGrid() {
   const [visibleProducts, setVisibleProducts] = useState(
-    products.slice(0, PRODUCTS_PER_PAGE)
+    productsHomePage.slice(0, PRODUCTS_PER_PAGE)
   );
-  const [filteredProducts, setFilteredProducts] = useState(products);
+  const [filteredProducts, setFilteredProducts] = useState(productsHomePage);
   const [page, setPage] = useState(1);
   const loaderRef = useRef<HTMLDivElement | null>(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -70,7 +59,7 @@ export default function ProductGrid() {
   };
 
   useEffect(() => {
-    let filtered = products.filter(
+    let filtered = productsHomePage.filter(
       (product) =>
         (selectedType ? product.type === selectedType : true) &&
         getDiscountedPrice(product.price, product.discount) >= priceRange[0] &&
