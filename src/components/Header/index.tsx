@@ -28,7 +28,7 @@ export default function Header() {
           />
           <FaSearch
             className="cursor-pointer"
-            onClick={() => router.push(`?search=${search}`)}
+            onClick={() => router.push(`/?search=${search}`)}
           />
         </div>
 
