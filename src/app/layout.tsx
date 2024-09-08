@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { CartProvider } from "@/context/CartContext";
 import "./globals.css";
+import Header from "@/components/Header";
+import Footer from "@/components/Footer";
 
 export const metadata: Metadata = {
   title: "Solarapp Ecommerce",
@@ -15,7 +17,11 @@ export default function RootLayout({
   return (
     <html lang="pt-br">
       <body>
-        <CartProvider>{children}</CartProvider>
+        <CartProvider>
+          <Header />
+          {children}
+          <Footer />
+        </CartProvider>
       </body>
     </html>
   );
