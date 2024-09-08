@@ -1,9 +1,10 @@
 "use client";
 
 import React, { useState, useEffect, useRef } from "react";
-import { useCart } from "@/context/CartContext";
-import Link from "next/link";
 import { useSearchParams } from "next/navigation";
+import ProductCard from "@/components/ProdutCard";
+import { formatCurrencyNumber } from "@/utils/formatCurrency";
+import getDiscountedPrice from "@/utils/getDiscountPrice";
 
 const products = Array.from({ length: 50 }, (_, index) => ({
   id: index + 2,
@@ -17,14 +18,9 @@ const products = Array.from({ length: 50 }, (_, index) => ({
   power: Math.floor(Math.random() * 500) + 100,
 }));
 
-const getDiscountedPrice = (price: number, discount: number) => {
-  return price - (price * discount) / 100;
-};
-
 const PRODUCTS_PER_PAGE = 8;
 
 export default function ProductGrid() {
-  const { addToCart } = useCart();
   const [visibleProducts, setVisibleProducts] = useState(
     products.slice(0, PRODUCTS_PER_PAGE)
   );
@@ -34,7 +30,7 @@ export default function ProductGrid() {
   const [isLoading, setIsLoading] = useState(false);
 
   const [selectedType, setSelectedType] = useState<string | null>(null);
-  const [priceRange, setPriceRange] = useState<[number, number]>([0, 999999]);
+  const [priceRange, setPriceRange] = useState<[number, number]>([0, 500000]);
   const [selectedBrand, setSelectedBrand] = useState<string | null>(null);
   const [sortOrder, setSortOrder] = useState<string>("");
 
@@ -77,8 +73,8 @@ export default function ProductGrid() {
     let filtered = products.filter(
       (product) =>
         (selectedType ? product.type === selectedType : true) &&
-        product.price >= priceRange[0] &&
-        product.price <= priceRange[1] &&
+        getDiscountedPrice(product.price, product.discount) >= priceRange[0] &&
+        getDiscountedPrice(product.price, product.discount) <= priceRange[1] &&
         (selectedBrand ? product.brand === selectedBrand : true)
     );
 
@@ -136,24 +132,29 @@ export default function ProductGrid() {
             </label>
             <div className="flex gap-2">
               <input
-                type="number"
+                type="text"
                 className="border p-2 rounded-lg shadow-inner bg-white hover:bg-gray-50 transition duration-300 ease-in-out w-full"
                 placeholder="Min"
-                value={priceRange[0]}
-                onChange={(e) =>
-                  setPriceRange([+e.target.value, priceRange[1]])
-                }
+                value={formatCurrencyNumber(priceRange[0])}
+                onChange={(e) => {
+                  const inputValue = e.target.value;
+                  const numericValue = inputValue.replace(/\D/g, "");
+                  setPriceRange([parseFloat(numericValue) || 0, priceRange[1]]);
+                }}
                 min="0"
               />
+
               <input
-                type="number"
+                type="text"
                 className="border p-2 rounded-lg shadow-inner bg-white hover:bg-gray-50 transition duration-300 ease-in-out w-full"
                 placeholder="Max"
-                value={priceRange[1]}
-                onChange={(e) =>
-                  setPriceRange([priceRange[0], +e.target.value])
-                }
-                max="99999"
+                value={formatCurrencyNumber(priceRange[1])}
+                onChange={(e) => {
+                  const inputValue = e.target.value;
+                  const numericValue = inputValue.replace(/\D/g, "");
+                  setPriceRange([priceRange[0], parseFloat(numericValue) || 0]);
+                }}
+                max={priceRange[1]}
               />
             </div>
           </div>
@@ -199,58 +200,7 @@ export default function ProductGrid() {
       {/* Grid de produtos */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
         {visibleProducts.map((product) => (
-          <div
-            key={product.id}
-            className="relative border rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition-shadow duration-300 bg-white"
-          >
-            {product.discount > 0 && (
-              <span className="absolute top-2 left-2 bg-red-500 text-white text-xs font-bold rounded-full px-3 py-1">
-                {product.discount}% OFF
-              </span>
-            )}
-            <Link href={`/product/${product.id}`}>
-              <img
-                src={product.image}
-                alt={product.name}
-                className="w-full h-56 object-cover hover:scale-105 transition-transform duration-300 rounded-t-xl cursor-pointer"
-              />
-            </Link>
-            <div className="p-6">
-              <Link href={`/product/${product.id}`}>
-                <h3 className="text-lg font-bold text-gray-800 cursor-pointer">
-                  {product.name}
-                </h3>
-              </Link>
-              <div className="mt-2 text-gray-600 flex items-center justify-between">
-                <span className="text-lg font-semibold text-teal-500">
-                  ${getDiscountedPrice(product.price, product.discount)}
-                </span>
-                {product.discount > 0 && (
-                  <span className="text-sm line-through text-gray-400">
-                    ${product.price}
-                  </span>
-                )}
-              </div>
-              {/* Exibindo o tipo de produto */}
-              <div className="mt-2 text-sm text-gray-500">
-                Tipo: {product.type}
-              </div>
-              <button
-                onClick={() =>
-                  addToCart({
-                    id: product.id,
-                    image: product.image,
-                    name: product.name,
-                    price: getDiscountedPrice(product.price, product.discount),
-                    quantity: 1,
-                  })
-                }
-                className="mt-4 w-full py-2 bg-teal-500 text-white font-medium rounded-full hover:bg-teal-600 transition-colors duration-300"
-              >
-                Adicionar ao carrinho
-              </button>
-            </div>
-          </div>
+          <ProductCard key={product.id} product={product} />
         ))}
       </div>
 

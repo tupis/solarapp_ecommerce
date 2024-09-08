@@ -1,11 +1,13 @@
 "use client";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
 
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useCart } from "@/context/CartContext";
 import Slider from "react-slick";
-import "slick-carousel/slick/slick.css";
-import "slick-carousel/slick/slick-theme.css";
+import ProductCard from "@/components/ProdutCard";
+import { formatCurrencyNumber } from "@/utils/formatCurrency";
 
 const products = [
   {
@@ -233,10 +235,12 @@ const ProductDetails = () => {
             </div>
 
             <div className="mt-6 text-3xl text-teal-500 font-bold">
-              R${getDiscountedPrice(product.price, product.discount).toFixed(2)}
+              {formatCurrencyNumber(
+                getDiscountedPrice(product.price, product.discount)
+              )}
               {product.discount > 0 && (
                 <span className="text-lg line-through text-gray-400 ml-2">
-                  R${product.price.toFixed(2)}
+                  {formatCurrencyNumber(product.price)}
                 </span>
               )}
             </div>
@@ -294,48 +298,7 @@ const ProductDetails = () => {
           </h3>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 mt-6">
             {relatedProducts.map((relatedProduct) => (
-              <div
-                key={relatedProduct.id}
-                className="border border-gray-200 p-4 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300"
-              >
-                <img
-                  src={relatedProduct.image}
-                  alt={relatedProduct.name}
-                  className="w-full h-48 object-cover mb-4 rounded-lg"
-                />
-                <h4 className="text-lg font-semibold text-gray-900">
-                  {relatedProduct.name}
-                </h4>
-                <p className="mt-2 text-teal-500 font-bold">
-                  R$
-                  {getDiscountedPrice(
-                    relatedProduct.price,
-                    relatedProduct.discount
-                  ).toFixed(2)}
-                  {relatedProduct.discount > 0 && (
-                    <span className="text-sm line-through text-gray-400 ml-2">
-                      R${relatedProduct.price.toFixed(2)}
-                    </span>
-                  )}
-                </p>
-                <button
-                  onClick={() =>
-                    addToCart({
-                      id: relatedProduct.id,
-                      name: relatedProduct.name,
-                      price: getDiscountedPrice(
-                        relatedProduct.price,
-                        relatedProduct.discount
-                      ),
-                      quantity: 1,
-                      image: relatedProduct.image,
-                    })
-                  }
-                  className="mt-4 w-full py-2 bg-teal-500 text-white font-medium rounded-lg shadow hover:bg-teal-600 transition-colors duration-300"
-                >
-                  Adicionar ao Carrinho
-                </button>
-              </div>
+              <ProductCard key={relatedProduct.id} product={relatedProduct} />
             ))}
           </div>
         </div>
