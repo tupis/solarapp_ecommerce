@@ -3,6 +3,8 @@
 import React from "react";
 import { useCart } from "@/context/CartContext";
 import Link from "next/link";
+import { FaTrash } from "react-icons/fa";
+import { formatCurrencyNumber } from "@/utils/formatCurrency";
 
 const CheckoutPage = () => {
   const { cartItems, removeFromCart, updateCartItemQuantity } = useCart();
@@ -48,7 +50,7 @@ const CheckoutPage = () => {
             <div className="flex-grow">
               <h2 className="text-xl font-bold text-gray-800">{item.name}</h2>
               <p className="text-gray-600 mt-1">
-                Preço unitário: R${item.price.toFixed(2)}
+                Preço unitário: {formatCurrencyNumber(item.price)}
               </p>
               <p className="text-gray-600 mt-1">
                 Quantidade:
@@ -63,16 +65,15 @@ const CheckoutPage = () => {
                 />
               </p>
               <p className="text-teal-500 font-bold mt-2">
-                Subtotal: R${(item.price * item.quantity).toFixed(2)}
+                Subtotal: {formatCurrencyNumber(item.price * item.quantity)}
               </p>
             </div>
 
-            {/* Botão para remover item */}
             <button
               onClick={() => removeFromCart(item.id)}
               className="text-red-500 hover:text-red-700 ml-4"
             >
-              Remover
+              <FaTrash />
             </button>
           </div>
         ))}
@@ -82,7 +83,7 @@ const CheckoutPage = () => {
       <div className="flex justify-between items-center border-t pt-4 mt-6">
         <h3 className="text-2xl font-bold text-gray-900">Total:</h3>
         <p className="text-3xl text-teal-500 font-bold">
-          R${getTotalPrice().toFixed(2)}
+          {formatCurrencyNumber(getTotalPrice())}
         </p>
       </div>
 

@@ -3,6 +3,8 @@
 import React, { useMemo } from "react";
 import { useCart } from "@/context/CartContext";
 import Link from "next/link";
+import { formatCurrencyNumber } from "@/utils/formatCurrency";
+import { FaTrash } from "react-icons/fa";
 
 interface CartModalProps {
   onClose: () => void;
@@ -72,8 +74,8 @@ export default function CartModal({ onClose }: CartModalProps) {
                       {item.name}
                     </h3>
                     <p className="text-sm text-gray-500">
-                      R${item.price} x {item.quantity} = R$
-                      {(item.price * item.quantity).toFixed(2)}
+                      {formatCurrencyNumber(item.price)} x {item.quantity} =
+                      {formatCurrencyNumber(item.price * item.quantity)}
                     </p>
                   </div>
                   <div className="flex items-center space-x-2">
@@ -96,7 +98,7 @@ export default function CartModal({ onClose }: CartModalProps) {
                       onClick={() => removeFromCart(item.id)}
                       className="bg-red-500 text-white px-3 py-1 rounded-full hover:bg-red-600 transition-colors"
                     >
-                      Excluir
+                      <FaTrash />
                     </button>
                   </div>
                 </div>
@@ -106,7 +108,7 @@ export default function CartModal({ onClose }: CartModalProps) {
             <div className="mt-6 border-t pt-4">
               <div className="flex justify-between text-lg font-semibold text-gray-800">
                 <span>Total</span>
-                <span>R${totalPrice.toFixed(2)}</span>
+                <span>{formatCurrencyNumber(totalPrice)}</span>
               </div>
               <Link href={"/checkout"}>
                 <button className="w-full bg-blue-600 text-white py-3 rounded-lg mt-6 hover:bg-blue-700 transition-colors font-medium">
