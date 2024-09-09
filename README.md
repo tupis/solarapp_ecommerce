@@ -62,6 +62,10 @@ Principais tecnologias usadas neste projeto:
 - [Tailwind CSS](https://tailwindcss.com/docs/installation) - Estrutura CSS de código aberto
 - [Docker](https://www.docker.com/) - Plataforma de containerização
 
+## 📄 Licença
+
+Este projeto está sob a licença MIT.
+
 ## ✒ Desenvolvedor
 
 <a href="https://github.com/tupis">
