@@ -30,6 +30,8 @@ interface CartProviderProps {
 }
 
 const loadCartFromLocalStorage = (): Product[] => {
+  if (typeof window === "undefined") return [];
+
   const storedCart = localStorage.getItem("cartItems");
   return storedCart ? JSON.parse(storedCart) : [];
 };
@@ -44,7 +46,9 @@ export const CartProvider: React.FC<CartProviderProps> = ({ children }) => {
   );
 
   useEffect(() => {
-    saveCartToLocalStorage(cartItems);
+    if (typeof window !== "undefined") {
+      saveCartToLocalStorage(cartItems);
+    }
   }, [cartItems]);
 
   const addToCart = (product: Product) => {
