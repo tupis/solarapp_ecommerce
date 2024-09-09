@@ -3,7 +3,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useSearchParams } from "next/navigation";
 import ProductCard from "@/components/ProdutCard";
-import { formatCurrencyNumber } from "@/utils/formatCurrency";
+import { formatCurrencyString } from "@/utils/formatCurrency";
 import getDiscountedPrice from "@/utils/getDiscountPrice";
 import { productsHomePage } from "@/app/mocks/product";
 
@@ -62,8 +62,10 @@ export default function ProductGrid() {
     let filtered = productsHomePage.filter(
       (product) =>
         (selectedType ? product.type === selectedType : true) &&
-        getDiscountedPrice(product.price, product.discount) >= priceRange[0] &&
-        getDiscountedPrice(product.price, product.discount) <= priceRange[1] &&
+        getDiscountedPrice(product.price, product.discount) * 100 >=
+          priceRange[0] &&
+        getDiscountedPrice(product.price, product.discount) * 100 <=
+          priceRange[1] &&
         (selectedBrand ? product.brand === selectedBrand : true)
     );
 
@@ -124,11 +126,11 @@ export default function ProductGrid() {
                 type="text"
                 className="border p-2 rounded-lg shadow-inner bg-white hover:bg-gray-50 transition duration-300 ease-in-out w-full"
                 placeholder="Min"
-                value={formatCurrencyNumber(priceRange[0])}
+                value={formatCurrencyString(priceRange[0].toString())}
                 onChange={(e) => {
                   const inputValue = e.target.value;
                   const numericValue = inputValue.replace(/\D/g, "");
-                  setPriceRange([parseFloat(numericValue) || 0, priceRange[1]]);
+                  setPriceRange([parseFloat(numericValue), priceRange[1]]);
                 }}
                 min="0"
               />
@@ -137,11 +139,11 @@ export default function ProductGrid() {
                 type="text"
                 className="border p-2 rounded-lg shadow-inner bg-white hover:bg-gray-50 transition duration-300 ease-in-out w-full"
                 placeholder="Max"
-                value={formatCurrencyNumber(priceRange[1])}
+                value={formatCurrencyString(priceRange[1].toString())}
                 onChange={(e) => {
                   const inputValue = e.target.value;
                   const numericValue = inputValue.replace(/\D/g, "");
-                  setPriceRange([priceRange[0], parseFloat(numericValue) || 0]);
+                  setPriceRange([priceRange[0], parseFloat(numericValue)]);
                 }}
                 max={priceRange[1]}
               />
