@@ -229,7 +229,9 @@ const ProductDetails = () => {
             <Slider {...carouselSettings}>
               {reviews.map((review, index) => (
                 <div key={index} className="p-4">
-                  <p className="text-gray-700 italic">"{review.content}"</p>
+                  <p className="text-gray-700 italic">
+                    &quot;{review.content}&quot;
+                  </p>
                   <p className="mt-2 text-gray-900 font-semibold">
                     - {review.name}
                   </p>
